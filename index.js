@@ -6,6 +6,8 @@ const prisma = new PrismaClient();
 // Create a new Express application
 const app = express();
 
+app.use(express.json());
+
 // Define a route for the root URL ("/")
 app.get('/', (req, res) => {
   res.send('Hello, World!');
@@ -29,6 +31,55 @@ app.get('/feed',async (req, res) => {
 })
 
 
+app.post(`/post`, async (req, res) => {
+
+    const {title,content,authorEmail} = req.body;
+
+    try {
+        const result = await prisma.post.create({
+            data: {
+                title,
+                content,
+                published: false,
+                author: {
+                    connect: {
+                        email: authorEmail
+                    }
+                }
+            }
+        })
+    
+        res.json(result);
+
+    } catch (error) {
+        console.log(error);
+    }
+
+    
+})
+
+app.put('/publish/:id',async (req,res) => {
+
+    const {id} = req.params;
+    const post = await prisma.post.update({
+        where : {
+            id : {id: Number(id)},
+            data: { published: true },
+        }
+    })
+    res.json(post);
+})
+
+app.delete(`/post/:id`, async (req, res) => {
+    const { id } = req.params
+    const post = await prisma.post.delete({
+      where: {
+        id: Number(id),
+      },
+    })
+    res.json(post)
+  })
+  
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
