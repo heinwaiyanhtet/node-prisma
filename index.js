@@ -30,7 +30,6 @@ app.get('/feed',async (req, res) => {
 
 })
 
-
 app.post(`/post`, async (req, res) => {
 
     const {title,content,authorEmail} = req.body;
@@ -78,8 +77,9 @@ app.delete(`/post/:id`, async (req, res) => {
       },
     })
     res.json(post)
-  })
-  
+})
+
+
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
