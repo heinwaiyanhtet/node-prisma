@@ -28,4 +28,11 @@ model User {
   email String  @unique
   name  String?
   posts Post[]
+  profile Profile?
+}
+
+model Profile {
+    id   Int  @id @default(autoincrement())
+    user User @relation(fields: [userEmail], references: [email])
+    userEmail String @unique
 }
