@@ -55,3 +55,19 @@ model CategoriesOnPosts {
 
   @@id([postId, categoryId])
 }
+
+enum Type {
+  Blog
+  Twitter @map("comment_twitter")
+
+  @@map("comment_source_enum")
+}
+
+model Comment {
+  id      Int    @id @default(autoincrement()) // Adding a primary key
+  content String @map("comment_text")
+  email   String @map("commenter_email")
+  type    Type   @map("comment_type")  // Closing quotation mark added
+
+  @@map("comments")
+}
